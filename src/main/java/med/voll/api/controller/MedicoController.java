@@ -1,6 +1,5 @@
 package med.voll.api.controller;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import jakarta.validation.Valid;
-import med.voll.api.medico.DadosAtualizarMedico;
-import med.voll.api.medico.DadosCadastroMedico;
-import med.voll.api.medico.DadosDetalhamentoMedico;
-import med.voll.api.medico.DadosListagemMedico;
-import med.voll.api.medico.Medico;
-import med.voll.api.medico.MedicoRepository;
+import med.voll.api.domain.medico.DadosAtualizarMedico;
+import med.voll.api.domain.medico.DadosCadastroMedico;
+import med.voll.api.domain.medico.DadosDetalhamentoMedico;
+import med.voll.api.domain.medico.DadosListagemMedico;
+import med.voll.api.domain.medico.Medico;
+import med.voll.api.domain.medico.MedicoRepository;
 
 @RestController
 @RequestMapping("/medicos")
@@ -37,9 +36,7 @@ public class MedicoController {
     public ResponseEntity<DadosDetalhamentoMedico> cadastrar(@RequestBody @Valid DadosCadastroMedico dados,
             UriComponentsBuilder uriBuilder) {
         var medico = repository.save(new Medico(dados));
-
         var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
-
         return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
     }
 
@@ -52,9 +49,9 @@ public class MedicoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DadosDetalhamentoMedico> detalhar(@PathVariable Long id) {
+
         var medico = repository.getReferenceById(id);
         return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
-
     }
 
     @PutMapping
