@@ -24,14 +24,14 @@ public class TokenService {
 
     public String gerarToken(Usuario usuario) {
         try {
-            var algoritmo = Algorithm.HMAC256(secret);
+            var algoritimo = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer(ISSUER)
+                    .withIssuer("API Voll.med")
                     .withSubject(usuario.getLogin())
                     .withExpiresAt(dataExpiracao())
-                    .sign(algoritmo);
+                    .sign(algoritimo);
         } catch (JWTCreationException exception) {
-            throw new RuntimeException("erro ao gerar token jwt", exception);
+            throw new RuntimeException("Erro ao gerar token jwt", exception);
         }
     }
 
@@ -39,7 +39,7 @@ public class TokenService {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.require(algoritmo)
-                    .withIssuer(ISSUER)
+                    .withIssuer("API Voll.med")
                     .build()
                     .verify(tokenJWT)
                     .getSubject();

@@ -32,18 +32,22 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (tokenJWT != null) {
             var subject = tokenService.getSubject(tokenJWT);
             var usuario = usuarioRepository.findByLogin(subject);
-
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
         }
 
         filterChain.doFilter(request, response);
     }
 
     private String recuperarToken(HttpServletRequest request) {
+
         var authorizationHeader = request.getHeader("Authorization");
+
+        System.out.println(authorizationHeader);
         if (authorizationHeader != null) {
-            return authorizationHeader.replace("Bearer ", "").trim();
+            return authorizationHeader.replace("Bearer", " ").trim();
+
         }
 
         return null;
